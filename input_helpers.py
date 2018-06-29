@@ -67,7 +67,7 @@ class InputHelper(object):
         y=[]
         # positive samples from file
         for line in open(filepath):
-            l=line.strip().split("\t")
+            l=line.strip().split(",")
             if len(l)<2:
                 continue
             if random() > 0.5:
@@ -86,7 +86,7 @@ class InputHelper(object):
         y=[]
         # positive samples from file
         for line in open(filepath):
-            l=line.strip().split("\t")
+            l=line.strip().split(",")
             if len(l)<2:
                 continue
             if random() > 0.5:
