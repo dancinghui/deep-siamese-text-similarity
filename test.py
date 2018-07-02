@@ -20,8 +20,8 @@ import math
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
 tf.flags.DEFINE_string("checkpoint_dir", "", "Checkpoint directory from training run")
 tf.flags.DEFINE_string("eval_filepath", "corpus_test.txt", "Evaluate on this data (Default: None)")
-tf.flags.DEFINE_string("vocab_filepath", "runs/1530164771/checkpoints/vocab", "Load training time vocabulary (Default: None)")
-tf.flags.DEFINE_string("model", "runs/1530164771/checkpoints/model-340000", "Load trained model checkpoint (Default: None)")
+tf.flags.DEFINE_string("vocab_filepath", "runs/1530450443/checkpoints/vocab", "Load training time vocabulary (Default: None)")
+tf.flags.DEFINE_string("model", "runs/1530450443/checkpoints/model-71000", "Load trained model checkpoint (Default: None)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -42,7 +42,7 @@ if FLAGS.eval_filepath==None or FLAGS.vocab_filepath==None or FLAGS.model==None 
 
 # load data and map id-transform based on training time vocabulary
 inpH = InputHelper()
-x1_test,x2_test = inpH.getFiaTestDataSet(FLAGS.eval_filepath, FLAGS.vocab_filepath, 22)
+x1_test,x2_test,y_test = inpH.getTestDataSet(FLAGS.eval_filepath, FLAGS.vocab_filepath, 39)
 out_put_file=open('submission1.csv','w')
 out_put_file.write('y_pre'+'\n')
 print("\nEvaluating...\n")

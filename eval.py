@@ -14,8 +14,8 @@ from input_helpers import InputHelper
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
 tf.flags.DEFINE_string("checkpoint_dir", "", "Checkpoint directory from training run")
 tf.flags.DEFINE_string("eval_filepath", "validation.txt0", "Evaluate on this data (Default: None)")
-tf.flags.DEFINE_string("vocab_filepath", "runs/1530164771/checkpoints/vocab", "Load training time vocabulary (Default: None)")
-tf.flags.DEFINE_string("model", "runs/1530164771/checkpoints/model-340000", "Load trained model checkpoint (Default: None)")
+tf.flags.DEFINE_string("vocab_filepath", "runs/1530450443/checkpoints/vocab", "Load training time vocabulary (Default: None)")
+tf.flags.DEFINE_string("model", "runs/1530450443/checkpoints/model-71000", "Load trained model checkpoint (Default: None)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -36,7 +36,7 @@ if FLAGS.eval_filepath==None or FLAGS.vocab_filepath==None or FLAGS.model==None 
 
 # load data and map id-transform based on training time vocabulary
 inpH = InputHelper()
-x1_test,x2_test,y_test = inpH.getTestDataSet(FLAGS.eval_filepath, FLAGS.vocab_filepath, 22)
+x1_test,x2_test,y_test = inpH.getTestDataSet(FLAGS.eval_filepath, FLAGS.vocab_filepath, 39)
 
 print("\nEvaluating...\n")
 
@@ -45,7 +45,6 @@ print("\nEvaluating...\n")
 checkpoint_file = FLAGS.model
 print checkpoint_file
 graph = tf.Graph()
-op=graph.get_operations()
 with graph.as_default():
     session_conf = tf.ConfigProto(
       allow_soft_placement=FLAGS.allow_soft_placement,
@@ -56,7 +55,6 @@ with graph.as_default():
         saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
         sess.run(tf.initialize_all_variables())
         saver.restore(sess, checkpoint_file)
-        op1 = graph.get_operations()
         # Get the placeholders from the graph by name
         input_x1 = graph.get_operation_by_name("input_x1").outputs[0]
         input_x2 = graph.get_operation_by_name("input_x2").outputs[0]

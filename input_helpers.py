@@ -114,26 +114,13 @@ class InputHelper(object):
         y=[]
         # positive samples from file
         for line in open(filepath):
-            l=line.strip().split("\t")
+            l=line.strip().split(",")
             if len(l)<3:
                 continue
             x1.append(l[1].lower())
             x2.append(l[2].lower())
             y.append(int(l[0])) #np.array([0,1]))
         return np.asarray(x1),np.asarray(x2),np.asarray(y)
-
-    def getFinTestData(self, filepath):
-        print("Loading testing/labelled data from " + filepath)
-        x1 = []
-        x2 = []
-        # positive samples from file
-        for line in open(filepath):
-            l = line.strip().split("\t")
-            if len(l) < 2:
-                continue
-            x1.append(l[0].lower())
-            x2.append(l[1].lower())
-        return np.asarray(x1), np.asarray(x2)
 
     def batch_iter(self, data, batch_size, num_epochs, shuffle=True):
         """
@@ -168,7 +155,7 @@ class InputHelper(object):
         del y_shuffled
         with open('validation.txt'+str(i),'w') as f:
             for text1,text2,label in zip(x1_dev,x2_dev,y_dev):
-                f.write(str(label)+"\t"+text1+"\t"+text2+"\n")
+                f.write(str(label)+","+text1+","+text2+"\n")
             f.close()
         del x1_dev
         del y_dev
@@ -230,18 +217,3 @@ class InputHelper(object):
         gc.collect()
         return x1,x2, y
 
-
-    def getFiaTestDataSet(self, data_path, vocab_path, max_document_length):
-        x1_temp, x2_temp = self.getFinTestData(data_path)
-
-        # Build vocabulary
-        vocab_processor = MyVocabularyProcessor(max_document_length, min_frequency=0)
-        vocab_processor = vocab_processor.restore(vocab_path)
-        print len(vocab_processor.vocabulary_)
-
-        x1 = np.asarray(list(vocab_processor.transform(x1_temp)))
-        x2 = np.asarray(list(vocab_processor.transform(x2_temp)))
-        # Randomly shuffle data
-        del vocab_processor
-        gc.collect()
-        return x1, x2

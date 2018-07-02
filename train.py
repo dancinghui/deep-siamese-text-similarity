@@ -31,7 +31,9 @@ tf.flags.DEFINE_integer("hidden_units", 50, "Number of hidden units (default:50)
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
-tf.flags.DEFINE_integer("num_epochs", 100, "Number of training epochs (default: 200)")
+tf.flags.DEFINE_string("unit_type", "bilstm", "hidden unit type (default: lstm)")
+
+tf.flags.DEFINE_integer("num_epochs", 20, "Number of training epochs (default: 200)")
 tf.flags.DEFINE_integer("evaluate_every", 1000, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 1000, "Save model after this many steps (default: 100)")
 # Misc Parameters
@@ -50,7 +52,7 @@ if FLAGS.training_files==None:
     exit()
 
 
-max_document_length=22
+max_document_length=39
 inpH = InputHelper()
 train_set, dev_set, vocab_processor,sum_no_of_batches = inpH.getDataSets(FLAGS.training_files,max_document_length, 10,
                                                                          FLAGS.batch_size, FLAGS.is_char_based)
@@ -85,7 +87,8 @@ with tf.Graph().as_default():
                 embedding_size=FLAGS.embedding_dim,
                 hidden_units=FLAGS.hidden_units,
                 l2_reg_lambda=FLAGS.l2_reg_lambda,
-                batch_size=FLAGS.batch_size
+                batch_size=FLAGS.batch_size,
+
             )
         else:
             siameseModel = SiameseLSTMw2v(
@@ -95,7 +98,8 @@ with tf.Graph().as_default():
                 hidden_units=FLAGS.hidden_units,
                 l2_reg_lambda=FLAGS.l2_reg_lambda,
                 batch_size=FLAGS.batch_size,
-                trainableEmbeddings=trainableEmbeddings
+                trainableEmbeddings=trainableEmbeddings,
+                unit_type=FLAGS.unit_type
             )
         # Define Training procedure
         global_step = tf.Variable(0, name="global_step", trainable=False)
